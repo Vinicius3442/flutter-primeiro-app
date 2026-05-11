@@ -26,10 +26,9 @@ class _InventarioPaginaState extends State<InventarioPagina> with SingleTickerPr
 
   late Future<List<Produto>> _produtosFuture;
 
-  // Cores do Tema Hollow Knight
-  final Color soulColor = const Color(0xFFE0F7FA); // Cor da Alma (Branco azulado)
-  final Color voidColor = const Color(0xFF111111); // Cor do Vazio
-  final Color infectionColor = const Color(0xFFFF9800); // Cor da Infecção (Laranja)
+  final Color soulColor = const Color(0xFFE0F7FA);
+  final Color voidColor = const Color(0xFF111111);
+  final Color infectionColor = const Color(0xFFFF9800);
 
   @override
   void initState() {
@@ -145,12 +144,11 @@ class _InventarioPaginaState extends State<InventarioPagina> with SingleTickerPr
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage('https://wallpapers-clan.com/wp-content/uploads/2025/06/hollow-knight-the-knight-blue-forest-desktop-wallpaper-cover.jpg'),
+                image: AssetImage('assets/bg.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          // Blur por cima do fundo para destacar os cards
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
             child: Container(
@@ -328,7 +326,6 @@ class _InventarioPaginaState extends State<InventarioPagina> with SingleTickerPr
                 ),
                 title: Text(p.nome.toUpperCase(), style: GoogleFonts.cinzel(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white)),
                 
-                // O erro de sintaxe estava aqui: o EdgeInsets e o fechamento do Padding estavam errados
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 6.0),
                   child: Row(

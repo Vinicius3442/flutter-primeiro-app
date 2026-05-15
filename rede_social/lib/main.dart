@@ -7,11 +7,12 @@ import 'services/supabase_service.dart';
 import 'providers/auth_provider.dart';
 import 'providers/post_provider.dart';
 import 'screens/splash_screen.dart';
+import 'screens/home_screen.dart';
+import 'screens/auth_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Initialize Supabase
+
   try {
     await SupabaseService.initialize();
   } catch (e) {
@@ -37,22 +38,58 @@ class SennConnectApp extends StatelessWidget {
     return MaterialApp(
       title: 'SENN Connect',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
+      theme: ThemeData.dark().copyWith(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF0D47A1),
-          primary: const Color(0xFF0D47A1),
-          secondary: Colors.white,
+          seedColor: Colors.blueGrey, // Tons mais cinzas
+          brightness: Brightness.dark,
+          surface: Colors.transparent, // Important for glassmorphism
         ),
-        textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
+        scaffoldBackgroundColor: Colors.transparent, // Important for global bg
+        textTheme: GoogleFonts.cinzelTextTheme(ThemeData.dark().textTheme),
         useMaterial3: true,
       ),
-      home: Consumer<AuthProvider>(
-        builder: (context, auth, _) {
-          // While initializing or checking state, we show Splash
-          // After splash, it navigates. But for persistence:
-          return const SplashScreen();
-        },
-      ),
+      builder: (context, child) {
+        return Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/bg.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: child,
+        );
+      },
+      home: const AuthGate(),
+    );
+  }
+}
+
+class AuthGate extends StatefulWidget {
+  const AuthGate({super.key});
+
+  @override
+  State<AuthGate> createState() => _AuthGateState();
+}
+
+class _AuthGateState extends State<AuthGate> {
+  bool _showSplash = true;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) setState(() => _showSplash = false);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_showSplash) return const SplashScreen();
+
+    return Consumer<AuthProvider>(
+      builder: (context, auth, _) {
+        return auth.isAuthenticated ? HomeScreen() : AuthScreen();
+      },
     );
   }
 }

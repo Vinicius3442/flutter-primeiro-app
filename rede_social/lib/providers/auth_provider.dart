@@ -15,7 +15,7 @@ class AuthProvider extends ChangeNotifier {
   AuthProvider() {
     _user = SupabaseService.client.auth.currentUser;
     SupabaseService.client.auth.onAuthStateChange.listen((data) {
-      _user = data.user;
+      _user = data.session?.user;
       notifyListeners();
     });
   }

@@ -7,7 +7,7 @@ import 'services/supabase_service.dart';
 import 'providers/auth_provider.dart';
 import 'providers/post_provider.dart';
 import 'screens/splash_screen.dart';
-import 'screens/home_screen.dart';
+import 'screens/main_navigation_screen.dart';
 import 'screens/auth_screen.dart';
 
 void main() async {
@@ -88,7 +88,7 @@ class _AuthGateState extends State<AuthGate> {
 
     return Consumer<AuthProvider>(
       builder: (context, auth, _) {
-        return auth.isAuthenticated ? HomeScreen() : AuthScreen();
+        return auth.isAuthenticated ? const MainNavigationScreen() : const AuthScreen();
       },
     );
   }

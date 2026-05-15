@@ -36,12 +36,13 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
-  void addPost(String content, String authorName) {
+  void addPost(String content, String authorName, {String? authorImageUrl}) {
     _posts.insert(
       0,
       Post(
         id: DateTime.now().toString(),
         authorName: authorName,
+        authorImageUrl: authorImageUrl,
         content: content,
         createdAt: DateTime.now(),
       ),

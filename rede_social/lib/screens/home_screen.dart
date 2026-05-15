@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/post_provider.dart';
 import '../providers/auth_provider.dart';
+import '../widgets/glass_box.dart';
 import 'profile_screen.dart';
 import 'notifications_screen.dart';
 import 'chat_screen.dart';
@@ -14,10 +15,12 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: const Text('SENN Connect', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: const Color(0xFF0D47A1),
+        backgroundColor: Colors.black.withValues(alpha: 0.5),
         foregroundColor: Colors.white,
+        elevation: 0,
         actions: [
           IconButton(
             icon: const Icon(Icons.message_outlined),
@@ -32,14 +35,13 @@ class HomeScreen extends StatelessWidget {
       body: Consumer<PostProvider>(
         builder: (context, postProvider, _) {
           return ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 10),
             itemCount: postProvider.posts.length,
             itemBuilder: (context, index) {
               final post = postProvider.posts[index];
-              return Card(
-                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                elevation: 2,
-                child: Padding(
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: GlassBox(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,32 +49,32 @@ class HomeScreen extends StatelessWidget {
                       Row(
                         children: [
                           CircleAvatar(
-                            backgroundColor: const Color(0xFF0D47A1),
+                            backgroundColor: Colors.blueGrey.withValues(alpha: 0.5),
                             child: Text(post.authorName[0], style: const TextStyle(color: Colors.white)),
                           ),
                           const SizedBox(width: 12),
-                          Text(post.authorName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                          Text(post.authorName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white)),
                         ],
                       ),
                       const SizedBox(height: 12),
-                      Text(post.content, style: const TextStyle(fontSize: 15)),
+                      Text(post.content, style: const TextStyle(fontSize: 15, color: Colors.white70)),
                       const SizedBox(height: 12),
                       Row(
                         children: [
                           IconButton(
                             icon: Icon(
                               post.isLiked ? Icons.favorite : Icons.favorite_border,
-                              color: post.isLiked ? Colors.red : Colors.grey,
+                              color: post.isLiked ? Colors.white : Colors.white54,
                             ),
                             onPressed: () => postProvider.toggleLike(post.id),
                           ),
-                          Text('${post.likes}'),
+                          Text('${post.likes}', style: const TextStyle(color: Colors.white70)),
                           const SizedBox(width: 20),
                           IconButton(
-                            icon: const Icon(Icons.chat_bubble_outline, color: Colors.grey),
+                            icon: const Icon(Icons.chat_bubble_outline, color: Colors.white54),
                             onPressed: () {}, // Comment functionality
                           ),
-                          const Text('Comentar'),
+                          const Text('Comentar', style: TextStyle(color: Colors.white70)),
                         ],
                       ),
                     ],
@@ -83,23 +85,31 @@ class HomeScreen extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        selectedItemColor: const Color(0xFF0D47A1),
-        unselectedItemColor: Colors.grey,
-        onTap: (index) {
-          if (index == 2) {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileScreen()));
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Explorar'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
-        ],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.5),
+          border: const Border(top: BorderSide(color: Colors.white12, width: 1)),
+        ),
+        child: BottomNavigationBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          currentIndex: 0,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.white54,
+          onTap: (index) {
+            if (index == 2) {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileScreen()));
+            }
+          },
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Explorar'),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF0D47A1),
+        backgroundColor: Colors.blueGrey.withValues(alpha: 0.8),
         child: const Icon(Icons.add, color: Colors.white),
         onPressed: () => _showAddPostDialog(context),
       ),
@@ -111,15 +121,23 @@ class HomeScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Nova Postagem'),
+        backgroundColor: const Color(0xFF1A1C1E),
+        title: const Text('Nova Postagem', style: TextStyle(color: Colors.white)),
         content: TextField(
           controller: controller,
-          decoration: const InputDecoration(hintText: 'O que você está pensando?'),
+          style: const TextStyle(color: Colors.white),
+          decoration: const InputDecoration(
+            hintText: 'O que você está pensando?',
+            hintStyle: TextStyle(color: Colors.white54),
+            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.blueGrey)),
+          ),
           maxLines: 3,
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar', style: TextStyle(color: Colors.white54))),
           ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.blueGrey),
             onPressed: () {
               if (controller.text.isNotEmpty) {
                 final user = Provider.of<AuthProvider>(context, listen: false).user;
@@ -130,7 +148,7 @@ class HomeScreen extends StatelessWidget {
                 Navigator.pop(context);
               }
             },
-            child: const Text('Postar'),
+            child: const Text('Postar', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),

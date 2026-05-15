@@ -12,8 +12,7 @@ import 'screens/auth_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Initialize Supabase
+
   try {
     await SupabaseService.initialize();
   } catch (e) {
@@ -39,15 +38,27 @@ class SennConnectApp extends StatelessWidget {
     return MaterialApp(
       title: 'SENN Connect',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
+      theme: ThemeData.dark().copyWith(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF0D47A1),
-          primary: const Color(0xFF0D47A1),
-          secondary: Colors.white,
+          seedColor: Colors.blueGrey, // Tons mais cinzas
+          brightness: Brightness.dark,
+          surface: Colors.transparent, // Important for glassmorphism
         ),
-        textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
+        scaffoldBackgroundColor: Colors.transparent, // Important for global bg
+        textTheme: GoogleFonts.cinzelTextTheme(ThemeData.dark().textTheme),
         useMaterial3: true,
       ),
+      builder: (context, child) {
+        return Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/bg.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: child,
+        );
+      },
       home: const AuthGate(),
     );
   }

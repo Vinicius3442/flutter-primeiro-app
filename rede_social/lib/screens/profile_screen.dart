@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import '../widgets/glass_box.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -29,10 +30,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final authProvider = Provider.of<AuthProvider>(context);
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: const Text('Meu Perfil'),
-        backgroundColor: const Color(0xFF0D47A1),
+        backgroundColor: Colors.black.withValues(alpha: 0.5),
         foregroundColor: Colors.white,
+        elevation: 0,
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -50,22 +53,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Center(
               child: Stack(
                 children: [
-                  CircleAvatar(
-                    radius: 60,
-                    backgroundColor: const Color(0xFF0D47A1),
-                    child: Text(
-                      _nameController.text[0].toUpperCase(),
-                      style: const TextStyle(fontSize: 40, color: Colors.white),
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.blueGrey, width: 2),
+                    ),
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundColor: Colors.black.withValues(alpha: 0.7),
+                      child: Text(
+                        _nameController.text[0].toUpperCase(),
+                        style: const TextStyle(fontSize: 40, color: Colors.white),
+                      ),
                     ),
                   ),
                   Positioned(
                     bottom: 0,
                     right: 0,
                     child: CircleAvatar(
-                      backgroundColor: Colors.white,
+                      backgroundColor: Colors.blueGrey,
                       radius: 20,
                       child: IconButton(
-                        icon: const Icon(Icons.camera_alt, color: Color(0xFF0D47A1)),
+                        icon: const Icon(Icons.camera_alt, color: Colors.white, size: 20),
                         onPressed: () {}, // Image Picker integration
                       ),
                     ),
@@ -73,47 +82,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Nome', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
-                  TextField(
-                    controller: _nameController,
-                    enabled: _isEditing,
-                    decoration: const InputDecoration(border: UnderlineInputBorder()),
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text('Bio', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
-                  TextField(
-                    controller: _bioController,
-                    enabled: _isEditing,
-                    maxLines: 3,
-                    decoration: const InputDecoration(border: UnderlineInputBorder()),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 40),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() => _isEditing = !_isEditing);
-                      if (!_isEditing) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Perfil atualizado com sucesso!')),
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _isEditing ? Colors.green : const Color(0xFF0D47A1),
-                      foregroundColor: Colors.white,
-                      minimumSize: const Size(double.infinity, 50),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              child: GlassBox(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Nome', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white54)),
+                    TextField(
+                      controller: _nameController,
+                      enabled: _isEditing,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),
+                      decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.blueGrey)),
+                      ),
                     ),
-                    child: Text(_isEditing ? 'Salvar Alterações' : 'Editar Perfil'),
-                  ),
-                ],
+                    const SizedBox(height: 20),
+                    const Text('Bio', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white54)),
+                    TextField(
+                      controller: _bioController,
+                      enabled: _isEditing,
+                      maxLines: 3,
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
+                      decoration: const InputDecoration(
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white24)),
+                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.blueGrey)),
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() => _isEditing = !_isEditing);
+                        if (!_isEditing) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: const Text('Perfil atualizado com sucesso!', style: TextStyle(color: Colors.white)),
+                              backgroundColor: Colors.blueGrey.withValues(alpha: 0.8),
+                            ),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _isEditing ? Colors.green.withValues(alpha: 0.6) : Colors.blueGrey.withValues(alpha: 0.8),
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size(double.infinity, 50),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      child: Text(_isEditing ? 'Salvar Alterações' : 'Editar Perfil'),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

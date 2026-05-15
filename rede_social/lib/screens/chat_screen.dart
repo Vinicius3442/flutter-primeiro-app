@@ -1,6 +1,7 @@
 // Desenvolvido por: Vinicius Montuani e Pietro Rennó
 
 import 'package:flutter/material.dart';
+import '../widgets/glass_box.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -11,9 +12,9 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final List<Map<String, dynamic>> _messages = [
-    {'text': 'Olá! Como está o progresso do MVP?', 'isMe': false},
-    {'text': 'Tudo indo bem, acabamos de integrar o Supabase.', 'isMe': true},
-    {'text': 'Excelente! A interface está muito moderna.', 'isMe': false},
+    {'text': 'A escuridão se aproxima.', 'isMe': false},
+    {'text': 'E nós a receberemos.', 'isMe': true},
+    {'text': 'Excelente. A interface está verdadeiramente gótica.', 'isMe': false},
   ];
 
   final _controller = TextEditingController();
@@ -29,10 +30,12 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: const Text('Mensagens Diretas'),
-        backgroundColor: const Color(0xFF0D47A1),
+        backgroundColor: Colors.black.withValues(alpha: 0.5),
         foregroundColor: Colors.white,
+        elevation: 0,
       ),
       body: Column(
         children: [
@@ -59,52 +62,51 @@ class _ChatScreenState extends State<ChatScreen> {
         margin: const EdgeInsets.symmetric(vertical: 5),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: isMe ? const Color(0xFF0D47A1) : Colors.grey[200],
+          color: isMe ? Colors.blueGrey.withValues(alpha: 0.8) : Colors.white.withValues(alpha: 0.1),
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(15),
             topRight: const Radius.circular(15),
             bottomLeft: Radius.circular(isMe ? 15 : 0),
             bottomRight: Radius.circular(isMe ? 0 : 15),
           ),
+          border: Border.all(color: Colors.white24, width: 0.5),
         ),
         child: Text(
           text,
-          style: TextStyle(color: isMe ? Colors.white : Colors.black87),
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );
   }
 
   Widget _buildMessageInput() {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.2), spreadRadius: 1, blurRadius: 5)],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: _controller,
-              decoration: InputDecoration(
-                hintText: 'Escreva uma mensagem...',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(25), borderSide: BorderSide.none),
-                filled: true,
-                fillColor: Colors.grey[100],
-                contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+      child: GlassBox(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _controller,
+                style: const TextStyle(color: Colors.white),
+                decoration: const InputDecoration(
+                  hintText: 'Escreva uma mensagem...',
+                  hintStyle: TextStyle(color: Colors.white54),
+                  border: InputBorder.none,
+                ),
               ),
             ),
-          ),
-          const SizedBox(width: 10),
-          CircleAvatar(
-            backgroundColor: const Color(0xFF0D47A1),
-            child: IconButton(
-              icon: const Icon(Icons.send, color: Colors.white),
-              onPressed: _sendMessage,
+            const SizedBox(width: 10),
+            CircleAvatar(
+              backgroundColor: Colors.blueGrey.withValues(alpha: 0.8),
+              child: IconButton(
+                icon: const Icon(Icons.send, color: Colors.white),
+                onPressed: _sendMessage,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

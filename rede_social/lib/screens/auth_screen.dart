@@ -36,12 +36,10 @@ class _AuthScreenState extends State<AuthScreen> {
     }
 
     if (error != null) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(error), backgroundColor: Colors.red),
       );
-    } else if (_isLogin) {
-      // Auto-redirect is handled by AuthProvider listener in main.dart or SplashScreen, 
-      // but we can also push here if needed.
     }
   }
 

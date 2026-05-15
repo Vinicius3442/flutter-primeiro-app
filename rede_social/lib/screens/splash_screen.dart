@@ -2,40 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:provider/provider.dart';
-import '../providers/auth_provider.dart';
-import 'auth_screen.dart';
-import 'home_screen.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
-
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    _navigateToNext();
-  }
-
-  void _navigateToNext() async {
-    await Future.delayed(const Duration(seconds: 3));
-    if (!mounted) return;
-
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    if (authProvider.isAuthenticated) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
-      );
-    } else {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const AuthScreen()),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

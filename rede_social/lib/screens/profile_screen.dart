@@ -27,7 +27,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
-    final user = authProvider.user;
 
     return Scaffold(
       appBar: AppBar(
